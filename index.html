@@ -26,7 +26,9 @@
         </div>
     </nav>
 
-    <section class="secao-filtros" id="busca-filtros">
+    <main class="container conteudo-principal">
+
+        <section class="secao-filtros" id="busca-filtros">
             <h2>Pesquisa e Filtros</h2>
             <div class="painel-controles">
                 <div class="grupo-controle">
@@ -110,8 +112,78 @@
             </form>
         </section>
 
-    <main class="container conteudo-principal">
+        <section class="secao-listagem" id="listagem">
+            <h2>Itens Cadastrados</h2>
+            <div class="tabela-responsiva">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Termo</th>
+                            <th>Tradução</th>
+                            <th>Idioma</th>
+                            <th>Categoria</th>
+                            <th>Domínio</th>
+                            <th>Última Revisão</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Schedule</td>
+                            <td>Agendar, cronograma</td>
+                            <td>Inglês</td>
+                            <td>Vocabulário</td>
+                            <td>Intermediário (2)</td>
+                            <td>2026-09-28</td>
+                            <td>
+                                <button class="btn-acao btn-ver" title="Ver detalhes">Ver</button>
+                                <button class="btn-acao btn-editar" title="Editar">Editar</button>
+                                <button class="btn-acao btn-excluir" title="Excluir">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>To call it a day</td>
+                            <td>Por o dia por encerrado, parar por hoje</td>
+                            <td>Inglês</td>
+                            <td>Expressão</td>
+                            <td>Avançado (3)</td>
+                            <td>2026-09-30</td>
+                            <td>
+                                <button class="btn-acao btn-ver" title="Ver detalhes">Ver</button>
+                                <button class="btn-acao btn-editar" title="Editar">Editar</button>
+                                <button class="btn-acao btn-excluir" title="Excluir">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Present Perfect</td>
+                            <td>Passado com relevância no presente</td>
+                            <td>Inglês</td>
+                            <td>Gramática</td>
+                            <td>Iniciante (1)</td>
+                            <td>2026-10-02</td>
+                            <td>
+                                <button class="btn-acao btn-ver" title="Ver detalhes">Ver</button>
+                                <button class="btn-acao btn-editar" title="Editar">Editar</button>
+                                <button class="btn-acao btn-excluir" title="Excluir">Excluir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
+        <div class="detalhes-lateral" id="detalhes">
+            <h3>Detalhes do Item</h3>
+            <article class="cartao-detalhe">
+                <h4>Schedule</h4>
+                <p><strong>Tradução:</strong> Agendar, cronograma</p>
+                <p><strong>Idioma:</strong> Inglês</p>
+                <p><strong>Categoria:</strong> Vocabulário</p>
+                <p><strong>Nível de Domínio:</strong> Intermediário (2)</p>
+                <p><strong>Última Revisão:</strong> 2026-09-28</p>
+                <p><strong>Exemplo de uso:</strong> <em>"We need to schedule a meeting for tomorrow."</em></p>
+            </article>
+        </div>
     </main>
 
     <footer class="rodape-site">
