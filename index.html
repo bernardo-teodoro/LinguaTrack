@@ -26,6 +26,90 @@
         </div>
     </nav>
 
+    <section class="secao-filtros" id="busca-filtros">
+            <h2>Pesquisa e Filtros</h2>
+            <div class="painel-controles">
+                <div class="grupo-controle">
+                    <label for="campo-busca">Pesquisar termo:</label>
+                    <input type="text" id="campo-busca" placeholder="Digite uma palavra ou expressão...">
+                </div>
+
+                <div class="grupo-controle">
+                    <label for="filtro-categoria">Filtrar por Categoria:</label>
+                    <select id="filtro-categoria">
+                        <option value="">Todas as categorias</option>
+                        <option value="vocabulario">Vocabulário</option>
+                        <option value="gramatica">Gramática</option>
+                        <option value="expressao">Expressão</option>
+                    </select>
+                </div>
+
+                <div class="grupo-controle">
+                    <label for="ordenar-por">Ordenar por:</label>
+                    <select id="ordenar-por">
+                        <option value="termo-asc">Termo (A-Z)</option>
+                        <option value="data-desc">Mais recentes</option>
+                        <option value="dominio">Nível de Domínio</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="secao-formulario" id="cadastro">
+            <h2>Cadastrar Novo Item de Estudo</h2>
+            <form action="#" method="POST">
+                <div class="grupo-formulario">
+                    <label for="termo">Termo:</label>
+                    <input type="text" id="termo" name="termo" placeholder="Ex: Commitment" required>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="traducao">Tradução:</label>
+                    <input type="text" id="traducao" name="traducao" placeholder="Ex: Comprometimento, empenho" required>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="idioma">Idioma:</label>
+                    <select id="idioma" name="idioma" required>
+                        <option value="en">Inglês</option>
+                    </select>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="categoria">Categoria:</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="vocabulario">Vocabulário</option>
+                        <option value="gramatica">Gramática</option>
+                        <option value="expressao">Expressão</option>
+                    </select>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="dominio">Nível de Domínio:</label>
+                    <select id="dominio" name="dominio" required>
+                        <option value="1">1 - Iniciante</option>
+                        <option value="2">2 - Intermediário</option>
+                        <option value="3">3 - Avançado</option>
+                    </select>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="data-revisao">Data da última revisão:</label>
+                    <input type="date" id="data-revisao" name="data_revisao">
+                </div>
+
+                <div class="grupo-formulario largura-total">
+                    <label for="exemplo">Exemplo de uso:</label>
+                    <textarea id="exemplo" name="exemplo" rows="3" placeholder="Ex: Success requires hard work and commitment."></textarea>
+                </div>
+
+                <div class="botoes-form">
+                    <button type="submit" class="botao botao-primario">Salvar Item</button>
+                    <button type="reset" class="botao botao-secundario">Limpar</button>
+                </div>
+            </form>
+        </section>
+
     <main class="container conteudo-principal">
 
     </main>
