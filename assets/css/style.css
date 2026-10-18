@@ -296,3 +296,29 @@ tbody tr:hover {
     color: var(--perigo);
 }
 .btn-excluir:hover { background-color: #fecaca; }
+
+.detalhes-lateral {
+    background-color: #ffffff;
+    border-left: 5px solid var(--primaria);
+}
+
+.cartao-detalhe {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.cartao-detalhe h4 {
+    font-size: 1.25rem;
+    color: var(--primaria);
+    margin-bottom: 0.5rem;
+}
+
+.rodape-site {
+    background-color: #0f172a;
+    color: #94a3b8;
+    text-align: center;
+    padding: 2rem 0;
+    font-size: 0.9rem;
+    margin-top: auto;
+}
