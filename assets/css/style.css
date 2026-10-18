@@ -155,3 +155,82 @@ h2, h3 {
     border-color: var(--borda-foco);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
+
+.secao-formulario form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.grupo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.grupo-formulario label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--secundaria);
+}
+
+.grupo-formulario input,
+.grupo-formulario select,
+.grupo-formulario textarea {
+    padding: 0.75rem;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-borda);
+    font-size: 1rem;
+    background-color: #ffffff;
+    color: var(--texto-principal);
+    transition: var(--transicao);
+}
+
+.grupo-formulario input:focus,
+.grupo-formulario select:focus,
+.grupo-formulario textarea:focus {
+    outline: none;
+    border-color: var(--borda-foco);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.grupo-formulario.largura-total {
+    grid-column: 1 / -1;
+}
+
+.botoes-form {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.botao {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--raio-borda);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transicao);
+}
+
+.botao-primario {
+    background-color: var(--primaria);
+    color: #ffffff;
+}
+
+.botao-primario:hover,
+.botao-primario:focus {
+    background-color: var(--primaria-hover);
+}
+
+.botao-secundario {
+    background-color: #e2e8f0;
+    color: var(--secundaria);
+}
+
+.botao-secundario:hover,
+.botao-secundario:focus {
+    background-color: #cbd5e1;
+}
