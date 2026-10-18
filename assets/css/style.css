@@ -234,3 +234,65 @@ h2, h3 {
 .botao-secundario:focus {
     background-color: #cbd5e1;
 }
+
+.tabela-responsiva {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    margin-top: 0.5rem;
+}
+
+th, td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--borda);
+}
+
+th {
+    background-color: #f1f5f9;
+    font-weight: 600;
+    color: var(--secundaria);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+tbody tr {
+    transition: var(--transicao);
+}
+
+tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.btn-acao {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 0.25rem;
+    transition: var(--transicao);
+}
+
+.btn-ver {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+.btn-ver:hover { background-color: #bae6fd; }
+
+.btn-editar {
+    background-color: #fef9c3;
+    color: #a16207;
+}
+.btn-editar:hover { background-color: #fef08a; }
+
+.btn-excluir {
+    background-color: #fee2e2;
+    color: var(--perigo);
+}
+.btn-excluir:hover { background-color: #fecaca; }
