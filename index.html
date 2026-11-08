@@ -26,7 +26,7 @@
         </div>
     </nav>
 
-    <main class="container conteudo-principal">
+    <main class="container conteudo-principal" id="inicio">
 
         <section class="secao-filtros" id="busca-filtros">
             <h2>Pesquisa e Filtros</h2>
@@ -127,7 +127,7 @@
         </section>
 
         <section class="secao-listagem" id="listagem">
-            <h2>Itens Cadastrados</h2>
+            <h2>Itens Cadastrados <span class="contador" id="contador"></span></h2>
             <div class="tabela-responsiva">
                 <table>
                     <thead>
@@ -141,66 +141,21 @@
                             <th>Ações</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Schedule</td>
-                            <td>Agendar, cronograma</td>
-                            <td>Inglês</td>
-                            <td>Vocabulário</td>
-                            <td>Intermediário (2)</td>
-                            <td>2026-09-28</td>
-                            <td>
-                                <button class="btn-acao btn-ver" title="Ver detalhes">Ver</button>
-                                <button class="btn-acao btn-editar" title="Editar">Editar</button>
-                                <button class="btn-acao btn-excluir" title="Excluir">Excluir</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>To call it a day</td>
-                            <td>Por o dia por encerrado, parar por hoje</td>
-                            <td>Inglês</td>
-                            <td>Expressão</td>
-                            <td>Avançado (3)</td>
-                            <td>2026-09-30</td>
-                            <td>
-                                <button class="btn-acao btn-ver" title="Ver detalhes">Ver</button>
-                                <button class="btn-acao btn-editar" title="Editar">Editar</button>
-                                <button class="btn-acao btn-excluir" title="Excluir">Excluir</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Present Perfect</td>
-                            <td>Passado com relevância no presente</td>
-                            <td>Inglês</td>
-                            <td>Gramática</td>
-                            <td>Iniciante (1)</td>
-                            <td>2026-10-02</td>
-                            <td>
-                                <button class="btn-acao btn-ver" title="Ver detalhes">Ver</button>
-                                <button class="btn-acao btn-editar" title="Editar">Editar</button>
-                                <button class="btn-acao btn-excluir" title="Excluir">Excluir</button>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <tbody id="lista-itens"></tbody>
                 </table>
             </div>
+            <p class="estado-vazio" id="estado-vazio" hidden>Nenhum item encontrado.</p>
         </section>
 
         <div class="detalhes-lateral" id="detalhes">
             <h3>Detalhes do Item</h3>
-            <article class="cartao-detalhe">
-                <h4>Schedule</h4>
-                <p><strong>Tradução:</strong> Agendar, cronograma</p>
-                <p><strong>Idioma:</strong> Inglês</p>
-                <p><strong>Categoria:</strong> Vocabulário</p>
-                <p><strong>Nível de Domínio:</strong> Intermediário (2)</p>
-                <p><strong>Última Revisão:</strong> 2026-09-28</p>
-                <p><strong>Exemplo de uso:</strong> <em>"We need to schedule a meeting for tomorrow."</em></p>
-            </article>
+            <div id="detalhes-conteudo">
+                <p class="estado-vazio">Clique em "Ver" em um item da lista para ver os detalhes.</p>
+            </div>
         </div>
     </main>
 
-    <footer class="rodape-site">
+    <footer class="rodape-site" id="sobre">
         <div class="container">
             <p>&copy; 2026 LinguaTrack. Desenvolvido para a disciplina de Desenvolvimento Web.</p>
         </div>

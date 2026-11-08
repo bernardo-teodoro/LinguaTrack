@@ -335,6 +335,10 @@ tbody tr:hover {
 .mensagem-feedback.erro { background: #fee2e2; color: #991b1b; }
 .mensagem-feedback.info { background: #dbeafe; color: #1e40af; }
 
+.contador { font-size: 0.9rem; font-weight: 400; color: var(--texto-secundario); }
+
+.estado-vazio { color: var(--texto-secundario); text-align: center; padding: 1.5rem 0; }
+
 @media (min-width: 992px) {
     .conteudo-principal {
         grid-template-columns: 2fr 1fr;

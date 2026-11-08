@@ -1,6 +1,17 @@
 // ===== LinguaTrack - Etapa 3 =====
 
-let itens = [];
+const NOMES_CATEGORIA = { vocabulario: 'Vocabulário', gramatica: 'Gramática', expressao: 'Expressão' };
+const NOMES_DOMINIO = { 1: 'Iniciante', 2: 'Intermediário', 3: 'Avançado' };
+const NOMES_IDIOMA = { en: 'Inglês' };
+
+const itensIniciais = [
+    { id: 1, termo: 'Schedule', traducao: 'Agendar, cronograma', idioma: 'en', categoria: 'vocabulario', dominio: 2, dataRevisao: '2026-09-28', fonetica: '', definicao: '', exemplo: 'We need to schedule a meeting for tomorrow.', criadoEm: 1 },
+    { id: 2, termo: 'To call it a day', traducao: 'Dar o dia por encerrado, parar por hoje', idioma: 'en', categoria: 'expressao', dominio: 3, dataRevisao: '2026-09-30', fonetica: '', definicao: '', exemplo: "I'm tired, let's call it a day.", criadoEm: 2 },
+    { id: 3, termo: 'Present Perfect', traducao: 'Passado com relevância no presente', idioma: 'en', categoria: 'gramatica', dominio: 1, dataRevisao: '2026-10-02', fonetica: '', definicao: '', exemplo: 'I have studied English for two years.', criadoEm: 3 }
+];
+
+let itens = itensIniciais.slice();
+let idSelecionado = null;
 
 // ----- Elementos do DOM -----
 const form = document.getElementById('form-item');
@@ -15,6 +26,10 @@ const campoDefinicao = document.getElementById('definicao');
 const campoExemplo = document.getElementById('exemplo');
 const btnLimpar = document.getElementById('btn-limpar');
 const mensagem = document.getElementById('mensagem');
+const tbody = document.getElementById('lista-itens');
+const estadoVazio = document.getElementById('estado-vazio');
+const contador = document.getElementById('contador');
+const detalhes = document.getElementById('detalhes-conteudo');
 
 // ----- Utilidades -----
 function hoje() {
@@ -28,6 +43,23 @@ function proximoId() {
 function mostrarMensagem(texto, tipo) {
     mensagem.textContent = texto;
     mensagem.className = `mensagem-feedback ${tipo}`;
+}
+
+function formatarData(iso) {
+    if (!iso) return '—';
+    const [ano, mes, dia] = iso.split('-');
+    return `${dia}/${mes}/${ano}`;
+}
+
+function textoDominio(nivel) {
+    return `${NOMES_DOMINIO[nivel]} (${nivel})`;
+}
+
+function criarElemento(tag, texto, classe) {
+    const el = document.createElement(tag);
+    if (texto !== undefined) el.textContent = texto;
+    if (classe) el.className = classe;
+    return el;
 }
 
 // ----- Validação -----
@@ -65,6 +97,75 @@ function validarFormulario() {
     return valido;
 }
 
+// ----- Listagem -----
+function criarLinha(item) {
+    const tr = document.createElement('tr');
+    tr.appendChild(criarElemento('td', item.termo));
+    tr.appendChild(criarElemento('td', item.traducao));
+    tr.appendChild(criarElemento('td', NOMES_IDIOMA[item.idioma] || item.idioma));
+    tr.appendChild(criarElemento('td', NOMES_CATEGORIA[item.categoria]));
+    tr.appendChild(criarElemento('td', textoDominio(item.dominio)));
+    tr.appendChild(criarElemento('td', formatarData(item.dataRevisao)));
+
+    const tdAcoes = document.createElement('td');
+    [['Ver', 'btn-ver', 'ver'], ['Editar', 'btn-editar', 'editar'], ['Excluir', 'btn-excluir', 'excluir']].forEach(([rotulo, classe, acao]) => {
+        const botao = criarElemento('button', rotulo, `btn-acao ${classe}`);
+        botao.type = 'button';
+        botao.dataset.acao = acao;
+        botao.dataset.id = item.id;
+        botao.title = `${rotulo} "${item.termo}"`;
+        tdAcoes.appendChild(botao);
+    });
+    tr.appendChild(tdAcoes);
+    return tr;
+}
+
+function renderizarLista() {
+    const visiveis = itens;
+    tbody.innerHTML = '';
+    visiveis.forEach(item => tbody.appendChild(criarLinha(item)));
+    estadoVazio.hidden = visiveis.length > 0;
+    contador.textContent = `(${visiveis.length} de ${itens.length})`;
+}
+
+// ----- Detalhes -----
+function mostrarDetalhes(id) {
+    const item = itens.find(i => i.id === id);
+    detalhes.innerHTML = '';
+    if (!item) {
+        idSelecionado = null;
+        detalhes.appendChild(criarElemento('p', 'Clique em "Ver" em um item da lista para ver os detalhes.', 'estado-vazio'));
+        return;
+    }
+    idSelecionado = id;
+    const card = criarElemento('article', undefined, 'cartao-detalhe');
+    card.appendChild(criarElemento('h4', item.termo));
+
+    const campos = [
+        ['Tradução', item.traducao],
+        ['Idioma', NOMES_IDIOMA[item.idioma]],
+        ['Categoria', NOMES_CATEGORIA[item.categoria]],
+        ['Nível de Domínio', textoDominio(item.dominio)],
+        ['Última Revisão', formatarData(item.dataRevisao)]
+    ];
+    if (item.fonetica) campos.push(['Fonética', item.fonetica]);
+    if (item.definicao) campos.push(['Definição', item.definicao]);
+
+    campos.forEach(([rotulo, valor]) => {
+        const p = document.createElement('p');
+        p.appendChild(criarElemento('strong', `${rotulo}: `));
+        p.appendChild(document.createTextNode(valor));
+        card.appendChild(p);
+    });
+
+    const pEx = document.createElement('p');
+    pEx.appendChild(criarElemento('strong', 'Exemplo de uso: '));
+    pEx.appendChild(criarElemento('em', item.exemplo ? `"${item.exemplo}"` : '—'));
+    card.appendChild(pEx);
+
+    detalhes.appendChild(card);
+}
+
 // ----- Formulário -----
 function limparFormulario() {
     form.reset();
@@ -92,6 +193,8 @@ function salvarItem(evento) {
     };
 
     itens.push(novo);
+    renderizarLista();
+    mostrarDetalhes(novo.id);
     limparFormulario();
     mostrarMensagem(`"${novo.termo}" cadastrado com sucesso!`, 'sucesso');
 }
@@ -100,5 +203,14 @@ function salvarItem(evento) {
 form.addEventListener('submit', salvarItem);
 btnLimpar.addEventListener('click', () => { limparFormulario(); mostrarMensagem('', ''); });
 
+tbody.addEventListener('click', evento => {
+    const botao = evento.target.closest('button[data-acao]');
+    if (!botao) return;
+    const id = Number(botao.dataset.id);
+    if (botao.dataset.acao === 'ver') mostrarDetalhes(id);
+});
+
 // ----- Inicialização -----
 limparFormulario();
+renderizarLista();
+if (itens.length) mostrarDetalhes(itens[0].id);
