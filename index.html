@@ -59,15 +59,17 @@
 
         <section class="secao-formulario" id="cadastro">
             <h2>Cadastrar Novo Item de Estudo</h2>
-            <form action="#" method="POST">
+            <form id="form-item" novalidate>
                 <div class="grupo-formulario">
                     <label for="termo">Termo:</label>
                     <input type="text" id="termo" name="termo" placeholder="Ex: Commitment" required>
+                    <span class="erro-campo" id="erro-termo"></span>
                 </div>
 
                 <div class="grupo-formulario">
                     <label for="traducao">Tradução:</label>
                     <input type="text" id="traducao" name="traducao" placeholder="Ex: Comprometimento, empenho" required>
+                    <span class="erro-campo" id="erro-traducao"></span>
                 </div>
 
                 <div class="grupo-formulario">
@@ -100,15 +102,27 @@
                     <input type="date" id="data-revisao" name="data_revisao">
                 </div>
 
+                <div class="grupo-formulario">
+                    <label for="fonetica">Fonética:</label>
+                    <input type="text" id="fonetica" name="fonetica" placeholder="Ex: /kəˈmɪtmənt/">
+                </div>
+
+                <div class="grupo-formulario largura-total">
+                    <label for="definicao">Definição (em inglês):</label>
+                    <textarea id="definicao" name="definicao" rows="2" placeholder="Definição do termo"></textarea>
+                </div>
+
                 <div class="grupo-formulario largura-total">
                     <label for="exemplo">Exemplo de uso:</label>
                     <textarea id="exemplo" name="exemplo" rows="3" placeholder="Ex: Success requires hard work and commitment."></textarea>
                 </div>
 
                 <div class="botoes-form">
-                    <button type="submit" class="botao botao-primario">Salvar Item</button>
-                    <button type="reset" class="botao botao-secundario">Limpar</button>
+                    <button type="submit" class="botao botao-primario" id="btn-salvar">Salvar Item</button>
+                    <button type="button" class="botao botao-secundario" id="btn-limpar">Limpar</button>
                 </div>
+
+                <p class="mensagem-feedback" id="mensagem" role="status" aria-live="polite"></p>
             </form>
         </section>
 
