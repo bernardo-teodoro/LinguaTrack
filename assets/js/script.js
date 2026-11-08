@@ -10,7 +10,9 @@ const itensIniciais = [
     { id: 3, termo: 'Present Perfect', traducao: 'Passado com relevância no presente', idioma: 'en', categoria: 'gramatica', dominio: 1, dataRevisao: '2026-10-02', fonetica: '', definicao: '', exemplo: 'I have studied English for two years.', criadoEm: 3 }
 ];
 
-let itens = itensIniciais.slice();
+const CHAVE_STORAGE = 'linguatrack:itens';
+
+let itens = [];
 let idSelecionado = null;
 
 // ----- Elementos do DOM -----
@@ -30,6 +32,23 @@ const tbody = document.getElementById('lista-itens');
 const estadoVazio = document.getElementById('estado-vazio');
 const contador = document.getElementById('contador');
 const detalhes = document.getElementById('detalhes-conteudo');
+
+// ----- Persistência (localStorage) -----
+function carregarItens() {
+    try {
+        const salvo = localStorage.getItem(CHAVE_STORAGE);
+        if (salvo === null) return itensIniciais.slice();
+        const lista = JSON.parse(salvo);
+        return Array.isArray(lista) ? lista : [];
+    } catch (erro) {
+        console.error('Erro ao ler localStorage:', erro);
+        return [];
+    }
+}
+
+function salvarItens() {
+    localStorage.setItem(CHAVE_STORAGE, JSON.stringify(itens));
+}
 
 // ----- Utilidades -----
 function hoje() {
@@ -193,6 +212,7 @@ function salvarItem(evento) {
     };
 
     itens.push(novo);
+    salvarItens();
     renderizarLista();
     mostrarDetalhes(novo.id);
     limparFormulario();
@@ -211,6 +231,8 @@ tbody.addEventListener('click', evento => {
 });
 
 // ----- Inicialização -----
+itens = carregarItens();
+salvarItens();
 limparFormulario();
 renderizarLista();
 if (itens.length) mostrarDetalhes(itens[0].id);
