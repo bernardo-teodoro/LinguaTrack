@@ -335,6 +335,13 @@ tbody tr:hover {
 .mensagem-feedback.erro { background: #fee2e2; color: #991b1b; }
 .mensagem-feedback.info { background: #dbeafe; color: #1e40af; }
 
+.botao-api { background-color: #0f766e; color: #ffffff; align-self: flex-start; }
+
+.botao-api:hover, .botao-api:focus { background-color: #115e59; }
+.botao-api:disabled { opacity: 0.6; cursor: wait; }
+
+.dica-api { color: var(--texto-secundario); font-size: 0.8rem; }
+
 .contador { font-size: 0.9rem; font-weight: 400; color: var(--texto-secundario); }
 
 .estado-vazio { color: var(--texto-secundario); text-align: center; padding: 1.5rem 0; }

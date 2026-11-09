@@ -38,6 +38,7 @@ const btnSalvar = document.getElementById('btn-salvar');
 const buscaInput = document.getElementById('campo-busca');
 const filtroCategoria = document.getElementById('filtro-categoria');
 const ordenarPor = document.getElementById('ordenar-por');
+const btnApi = document.getElementById('btn-api');
 
 // ----- Persistência (localStorage) -----
 function carregarItens() {
@@ -290,12 +291,63 @@ function excluirItem(id) {
     mostrarMensagem(`"${item.termo}" foi excluído.`, 'sucesso');
 }
 
+// ----- Integração com APIs públicas -----
+async function buscarNaApi() {
+    const termo = campoTermo.value.trim();
+    if (termo.length < 2) {
+        mostrarErro(campoTermo, 'Digite um termo em inglês para buscar na API.');
+        campoTermo.focus();
+        return;
+    }
+    mostrarErro(campoTermo, '');
+    btnApi.disabled = true;
+    mostrarMensagem('Buscando dados nas APIs...', 'info');
+
+    const urlDicionario = `https://api.dictionaryapi.dev/v2/entries/en/${encodeURIComponent(termo)}`;
+    const urlTraducao = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(termo)}&langpair=en|pt-BR`;
+
+    const [resDic, resTrad] = await Promise.allSettled([
+        fetch(urlDicionario).then(r => (r.ok ? r.json() : Promise.reject(new Error('não encontrado')))),
+        fetch(urlTraducao).then(r => (r.ok ? r.json() : Promise.reject(new Error('falha na tradução'))))
+    ]);
+
+    const preenchidos = [];
+
+    if (resDic.status === 'fulfilled') {
+        const entrada = resDic.value[0];
+        const fonetica = entrada.phonetic || (entrada.phonetics.find(p => p.text) || {}).text;
+        const sentidos = entrada.meanings.flatMap(m => m.definitions);
+        const comExemplo = sentidos.find(d => d.example);
+
+        if (fonetica) { campoFonetica.value = fonetica; preenchidos.push('fonética'); }
+        if (sentidos.length) { campoDefinicao.value = sentidos[0].definition; preenchidos.push('definição'); }
+        if (comExemplo) { campoExemplo.value = comExemplo.example; preenchidos.push('exemplo'); }
+    }
+
+    if (resTrad.status === 'fulfilled' && resTrad.value.responseData) {
+        const traduzido = resTrad.value.responseData.translatedText;
+        if (traduzido && traduzido.toLowerCase() !== termo.toLowerCase()) {
+            campoTraducao.value = traduzido;
+            mostrarErro(campoTraducao, '');
+            preenchidos.push('tradução');
+        }
+    }
+
+    if (preenchidos.length) {
+        mostrarMensagem(`Campos preenchidos pela API: ${preenchidos.join(', ')}. Revise antes de salvar.`, 'sucesso');
+    } else {
+        mostrarMensagem('Nenhum dado encontrado para esse termo. Preencha manualmente.', 'erro');
+    }
+    btnApi.disabled = false;
+}
+
 // ----- Eventos -----
 form.addEventListener('submit', salvarItem);
 btnLimpar.addEventListener('click', () => { limparFormulario(); mostrarMensagem('', ''); });
 buscaInput.addEventListener('input', renderizarLista);
 filtroCategoria.addEventListener('change', renderizarLista);
 ordenarPor.addEventListener('change', renderizarLista);
+btnApi.addEventListener('click', buscarNaApi);
 
 tbody.addEventListener('click', evento => {
     const botao = evento.target.closest('button[data-acao]');
