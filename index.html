@@ -58,8 +58,10 @@
         </section>
 
         <section class="secao-formulario" id="cadastro">
-            <h2>Cadastrar Novo Item de Estudo</h2>
+            <h2 id="titulo-formulario">Cadastrar Novo Item de Estudo</h2>
             <form id="form-item" novalidate>
+                <input type="hidden" id="item-id">
+
                 <div class="grupo-formulario">
                     <label for="termo">Termo:</label>
                     <input type="text" id="termo" name="termo" placeholder="Ex: Commitment" required>

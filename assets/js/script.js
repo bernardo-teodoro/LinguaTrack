@@ -32,6 +32,12 @@ const tbody = document.getElementById('lista-itens');
 const estadoVazio = document.getElementById('estado-vazio');
 const contador = document.getElementById('contador');
 const detalhes = document.getElementById('detalhes-conteudo');
+const campoId = document.getElementById('item-id');
+const tituloForm = document.getElementById('titulo-formulario');
+const btnSalvar = document.getElementById('btn-salvar');
+const buscaInput = document.getElementById('campo-busca');
+const filtroCategoria = document.getElementById('filtro-categoria');
+const ordenarPor = document.getElementById('ordenar-por');
 
 // ----- Persistência (localStorage) -----
 function carregarItens() {
@@ -95,7 +101,7 @@ function validarFormulario() {
     if (termo.length < 2) {
         mostrarErro(campoTermo, 'Informe um termo com pelo menos 2 caracteres.');
         valido = false;
-    } else if (itens.some(i => i.termo.toLowerCase() === termo.toLowerCase())) {
+    } else if (itens.some(i => i.termo.toLowerCase() === termo.toLowerCase() && String(i.id) !== campoId.value)) {
         mostrarErro(campoTermo, 'Esse termo já está cadastrado.');
         valido = false;
     } else {
@@ -114,6 +120,26 @@ function validarFormulario() {
         valido = false;
     }
     return valido;
+}
+
+// ----- Pesquisa, filtro e ordenação -----
+function obterItensVisiveis() {
+    const busca = buscaInput.value.trim().toLowerCase();
+    const categoria = filtroCategoria.value;
+
+    const lista = itens.filter(item => {
+        const bateBusca = item.termo.toLowerCase().includes(busca) || item.traducao.toLowerCase().includes(busca);
+        const bateCategoria = categoria === '' || item.categoria === categoria;
+        return bateBusca && bateCategoria;
+    });
+
+    const criterio = ordenarPor.value;
+    lista.sort((a, b) => {
+        if (criterio === 'data-desc') return b.criadoEm - a.criadoEm;
+        if (criterio === 'dominio') return a.dominio - b.dominio || a.termo.localeCompare(b.termo);
+        return a.termo.localeCompare(b.termo, 'pt-BR', { sensitivity: 'base' });
+    });
+    return lista;
 }
 
 // ----- Listagem -----
@@ -140,7 +166,7 @@ function criarLinha(item) {
 }
 
 function renderizarLista() {
-    const visiveis = itens;
+    const visiveis = obterItensVisiveis();
     tbody.innerHTML = '';
     visiveis.forEach(item => tbody.appendChild(criarLinha(item)));
     estadoVazio.hidden = visiveis.length > 0;
@@ -188,8 +214,31 @@ function mostrarDetalhes(id) {
 // ----- Formulário -----
 function limparFormulario() {
     form.reset();
+    campoId.value = '';
     campoData.value = hoje();
+    tituloForm.textContent = 'Cadastrar Novo Item de Estudo';
+    btnSalvar.textContent = 'Salvar Item';
     [campoTermo, campoTraducao].forEach(c => mostrarErro(c, ''));
+}
+
+function iniciarEdicao(id) {
+    const item = itens.find(i => i.id === id);
+    if (!item) return;
+    campoId.value = item.id;
+    campoTermo.value = item.termo;
+    campoTraducao.value = item.traducao;
+    campoIdioma.value = item.idioma;
+    campoCategoria.value = item.categoria;
+    campoDominio.value = item.dominio;
+    campoData.value = item.dataRevisao;
+    campoFonetica.value = item.fonetica || '';
+    campoDefinicao.value = item.definicao || '';
+    campoExemplo.value = item.exemplo || '';
+    tituloForm.textContent = `Editando: ${item.termo}`;
+    btnSalvar.textContent = 'Atualizar Item';
+    mostrarMensagem('Modo de edição: altere os campos e clique em "Atualizar Item".', 'info');
+    document.getElementById('cadastro').scrollIntoView({ behavior: 'smooth' });
+    campoTermo.focus();
 }
 
 function salvarItem(evento) {
@@ -197,9 +246,7 @@ function salvarItem(evento) {
     mostrarMensagem('', '');
     if (!validarFormulario()) return;
 
-    const novo = {
-        id: proximoId(),
-        criadoEm: Date.now(),
+    const dados = {
         termo: campoTermo.value.trim(),
         traducao: campoTraducao.value.trim(),
         idioma: campoIdioma.value,
@@ -211,23 +258,52 @@ function salvarItem(evento) {
         exemplo: campoExemplo.value.trim()
     };
 
-    itens.push(novo);
+    let texto;
+    if (campoId.value) {
+        const id = Number(campoId.value);
+        const indice = itens.findIndex(i => i.id === id);
+        itens[indice] = { ...itens[indice], ...dados };
+        if (idSelecionado === id) mostrarDetalhes(id);
+        texto = `"${dados.termo}" atualizado com sucesso!`;
+    } else {
+        const novo = { id: proximoId(), criadoEm: Date.now(), ...dados };
+        itens.push(novo);
+        mostrarDetalhes(novo.id);
+        texto = `"${dados.termo}" cadastrado com sucesso!`;
+    }
+
     salvarItens();
     renderizarLista();
-    mostrarDetalhes(novo.id);
     limparFormulario();
-    mostrarMensagem(`"${novo.termo}" cadastrado com sucesso!`, 'sucesso');
+    mostrarMensagem(texto, 'sucesso');
+}
+
+// ----- Excluir -----
+function excluirItem(id) {
+    const item = itens.find(i => i.id === id);
+    if (!item || !confirm(`Deseja realmente excluir "${item.termo}"?`)) return;
+    itens = itens.filter(i => i.id !== id);
+    salvarItens();
+    if (idSelecionado === id) mostrarDetalhes(null);
+    if (campoId.value === String(id)) limparFormulario();
+    renderizarLista();
+    mostrarMensagem(`"${item.termo}" foi excluído.`, 'sucesso');
 }
 
 // ----- Eventos -----
 form.addEventListener('submit', salvarItem);
 btnLimpar.addEventListener('click', () => { limparFormulario(); mostrarMensagem('', ''); });
+buscaInput.addEventListener('input', renderizarLista);
+filtroCategoria.addEventListener('change', renderizarLista);
+ordenarPor.addEventListener('change', renderizarLista);
 
 tbody.addEventListener('click', evento => {
     const botao = evento.target.closest('button[data-acao]');
     if (!botao) return;
     const id = Number(botao.dataset.id);
     if (botao.dataset.acao === 'ver') mostrarDetalhes(id);
+    if (botao.dataset.acao === 'editar') iniciarEdicao(id);
+    if (botao.dataset.acao === 'excluir') excluirItem(id);
 });
 
 // ----- Inicialização -----
